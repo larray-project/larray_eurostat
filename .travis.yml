@@ -42,9 +42,9 @@ before_install:
 
 install:
     # Setup environment
-    - conda create -n travisci --yes python=${TRAVIS_PYTHON_VERSION:0:3} nose
+    - conda create -n travisci --yes python=${TRAVIS_PYTHON_VERSION:0:3}
+            nose -c gdementen larray
     - source activate travisci
-    - conda install -c gdementen larray
 
 script:
     # exclude (doc)tests from ufuncs (because docstrings are copied from numpy
