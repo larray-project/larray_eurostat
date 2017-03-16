@@ -1,0 +1,59 @@
+# References
+# - https://gist.github.com/dan-blanchard/7045057
+# - https://github.com/numba/numba/blob/master/.travis.yml
+language: python
+
+python:
+    - "2.7"
+    - "3.4"
+    - "3.5"
+    - "3.6"
+
+branches:
+    only:
+        - master
+        #- devel
+
+before_install:
+    # cannot use sudo with the container-based infrastructure
+    # - sudo apt-get update
+
+    # Install Miniconda
+    # We do this conditionally because it saves us some downloading if the
+    # version is the same.
+    - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
+        wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
+      else
+        wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+      fi
+    - bash miniconda.sh -b -p $HOME/miniconda
+    - export PATH="$HOME/miniconda/bin:$PATH"
+    - hash -r
+    - conda config --set always_yes yes --set changeps1 no
+    - conda update -q conda
+
+    # Useful for debugging any issues with conda
+    - conda info -a
+
+    # The next couple lines fix a crash with multiprocessing on Travis
+    # and are not specific to using Miniconda
+    # - sudo rm -rf /dev/shm
+    # - sudo ln -s /run/shm /dev/shm
+
+install:
+    # Setup environment
+    - conda create -n travisci --yes python=${TRAVIS_PYTHON_VERSION:0:3} nose
+    - source activate travisci
+    - conda install -c gdementen larray
+
+script:
+    # exclude (doc)tests from ufuncs (because docstrings are copied from numpy
+    # and many of those doctests are failing
+    - nosetests -v --with-doctest
+
+notifications:
+    on_success: "change"
+    on_failure: "always"
+
+# use container-based infrastructure
+sudo: false

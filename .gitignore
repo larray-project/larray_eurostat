@@ -1,0 +1,4 @@
+.idea
+*.pyc
+*.pyd
+larray_eurostat.egg-info
