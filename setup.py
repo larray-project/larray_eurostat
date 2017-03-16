@@ -10,7 +10,7 @@ def readlocal(fname):
 
 DISTNAME = 'larray_eurostat'
 VERSION = '0.1'
-AUTHOR = ' Alix Damman, Gaetan de Menten, Geert Bryon, Johan Duyck'
+AUTHOR = 'Alix Damman, Gaetan de Menten, Geert Bryon, Johan Duyck'
 AUTHOR_EMAIL = 'ald@plan.be'
 DESCRIPTION = "Additional package to import Eurostat files using LArray"
 LONG_DESCRIPTION = readlocal("README.rst")
