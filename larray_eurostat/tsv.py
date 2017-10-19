@@ -56,6 +56,7 @@ def eurostat_get(indicator, drop_markers=True):
      indic_na [1]: 'PPS_NAC'
      geo [45]: 'AT' 'BA' 'BE' ... 'TR' 'UK' 'US'
      time [54]: 2013 2012 2011 ... 1962 1961 1960
+    dtype: float64
     """
     with urlopen(EUROSTAT_BASEURL + indicator + ".tsv.gz") as f:
         with gzip_open(f, mode='rt') as fgz:
