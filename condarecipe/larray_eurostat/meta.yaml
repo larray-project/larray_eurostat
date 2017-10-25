@@ -1,9 +1,9 @@
 package:
   name: larray_eurostat
-  version: 0.26
+  version: 0.26.1
 
 source:
-  git_tag: 0.26
+  git_tag: 0.26.1
   git_url: https://github.com/larray-project/larray_eurostat.git
 
 # build:
