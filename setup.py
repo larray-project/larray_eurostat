@@ -15,15 +15,16 @@ AUTHOR_EMAIL = 'ald@plan.be'
 DESCRIPTION = "Additional package to import Eurostat files using LArray"
 LONG_DESCRIPTION = readlocal("README.rst")
 INSTALL_REQUIRES = ['larray']
-TESTS_REQUIRE = ['nose >= 1.0']
-TEST_SUITE = 'nose.collector'
+TESTS_REQUIRE = ['pytest']
+SETUP_REQUIRES = ['pytest-runner']
 
 LICENSE = 'GPLv3'
-PACKAGE_DATA = {'larray_eurostat': ['tests/data/*']}
 URL = 'https://github.com/larray-project/larray_eurostat'
+PACKAGE_DATA = {'larray_eurostat': ['tests/data/*']}
 
 CLASSIFIERS = [
-    'License :: OSI Approved :: GNU General Public License v3 (GPLv3)'
+    'Development Status :: 4 - Beta',
+    'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
     'Operating System :: OS Independent',
     'Intended Audience :: Science/Research',
     'Intended Audience :: Developers',
@@ -49,8 +50,8 @@ setup(
     long_description=LONG_DESCRIPTION,
     install_requires=INSTALL_REQUIRES,
     tests_require=TESTS_REQUIRE,
+    setup_requires=SETUP_REQUIRES,
     url=URL,
-    test_suite=TEST_SUITE,
     packages=find_packages(),
     package_data=PACKAGE_DATA,
 )
