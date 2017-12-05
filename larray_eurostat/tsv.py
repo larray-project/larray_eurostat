@@ -31,13 +31,13 @@ else:
         return s.translate({ord(c): None for c in chars})
 
 
-EUROSTAT_BASEURL = "http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=data%2F"
+EUROSTAT_BASEURL = "http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file="
 
 
 def _get_one(indicator, drop_markers=True):
     """Get one Eurostat indicator and return it as an array"""
 
-    with urlopen(EUROSTAT_BASEURL + indicator + ".tsv.gz") as f:
+    with urlopen(EUROSTAT_BASEURL + 'data/' + indicator + ".tsv.gz") as f:
         with gzip_open(f, mode='rt') as fgz:
             try:
                 s = fgz.read()
