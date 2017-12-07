@@ -20,7 +20,7 @@ SRC_CODE = "larray_eurostat"
 SRC_DOC = None
 
 GITHUB_REP = "https://github.com/larray-project/larray_eurostat"
-CONDA_FEEDSTOCK_REP = "https://github.com/conda-forge/larray_eurostat-feedstock.git"
+CONDA_FEEDSTOCK_REP = "https://github.com/larray-project/larray_eurostat-feedstock.git"
 ONLINE_DOC = None
 
 
