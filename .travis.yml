@@ -5,7 +5,6 @@ language: python
 
 python:
     - "2.7"
-    - "3.4"
     - "3.5"
     - "3.6"
 
@@ -41,16 +40,21 @@ before_install:
     # - sudo rm -rf /dev/shm
     # - sudo ln -s /run/shm /dev/shm
 
+    # clone larray repository
+    - git clone https://github.com/liam2/larray.git larray
+
 install:
     # Setup environment
     - conda create --debug -n travisci --yes python=${TRAVIS_PYTHON_VERSION:0:3}
-            larray nose
+            pandas pytest
     - source activate travisci
+    # install larray
+    - cd ./larray
+    - python setup.py install
+    - cd ..
 
 script:
-    # exclude (doc)tests from ufuncs (because docstrings are copied from numpy
-    # and many of those doctests are failing
-    - nosetests -v --with-doctest
+    - pytest
 
 notifications:
     on_success: "change"
