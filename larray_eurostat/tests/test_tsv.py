@@ -1,16 +1,16 @@
 from __future__ import absolute_import, division, print_function
 
-from unittest import TestCase
-import unittest
+import pytest
 from larray_eurostat.tsv import *
 
 
-class TestEurostat(TestCase):
-    def test_eurostat_get(self):
-        gdp = eurostat_get('nama_aux_cra')
-        self.assertEqual(gdp.dtype, float)
-        self.assertEqual(gdp.size, 2430)
+def test_eurostat_get():
+    dataset = 'nama_aux_cra'
 
+    msg = "Not a gzipped file (b'<!')"
+    if sys.version_info[0] >= 3:
+        msg += "\nCan't open file {}{}.tsv.gz".format(EUROSTAT_BASEURL, dataset)
+    type_err = IOError if sys.version_info[0] < 3 else OSError
 
-if __name__ == "__main__":
-    unittest.main()
+    with pytest.raises(type_err, message=msg):
+        eurostat_get(dataset)
