@@ -50,19 +50,25 @@ def eurostat_get(indicator, drop_markers=True):
 
     Examples
     --------
-    >>> gdp = eurostat_get('nama_aux_cra')
-    >>> gdp.info
-    1 x 45 x 54
-     indic_na [1]: 'PPS_NAC'
-     geo [45]: 'AT' 'BA' 'BE' ... 'TR' 'UK' 'US'
-     time [54]: 2013 2012 2011 ... 1962 1961 1960
+    >>> data = eurostat_get('nama_10r_2gvagr')
+    >>> data.info
+    1 x 310 x 16
+     unit [1]: 'PCH_PRE'
+     geo [310]: 'AT' 'BE' 'BE1' ... 'UKN0' 'UKZ' 'UKZZ'
+     time [16]: 2015 2014 2013 ... 2002 2001 2000
     dtype: float64
+    memory used: 38.75 Kb
     """
     with urlopen(EUROSTAT_BASEURL + indicator + ".tsv.gz") as f:
         with gzip_open(f, mode='rt') as fgz:
-            s = fgz.read()
-            if drop_markers:
-                first_line_end = s.index('\n')
-                # strip markers except on first line
-                s = s[:first_line_end] + remove_chars(s[first_line_end:], ' dbefcuipsrzn:')
-            return read_eurostat(StringIO(s))
+            try:
+                s = fgz.read()
+                if drop_markers:
+                    first_line_end = s.index('\n')
+                    # strip markers except on first line
+                    s = s[:first_line_end] + remove_chars(s[first_line_end:], ' dbefcuipsrzn:')
+                return read_eurostat(StringIO(s))
+            except Exception as e:
+                if sys.version_info[0] >= 3:
+                    e.args = (e.args[0] + " \nCan't open file {}".format(f.geturl()),)
+                raise
