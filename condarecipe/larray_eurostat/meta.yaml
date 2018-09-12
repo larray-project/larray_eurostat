@@ -5,42 +5,47 @@ package:
 source:
   git_tag: 0.28
   git_url: https://github.com/larray-project/larray_eurostat.git
+#  git_tag: master
+#  git_url: file://c:/Users/gdm/devel/larray_eutostat/.git
 
-# build:
-  # If this is a new build for the same version, increment the build
-  # number. If you do not include this key, it defaults to 0.
-  # number: 1
+build:
+  # If this is a new build for the same version, increment the build number
+  number: 0
+  # we can use this instead of explicit build scripts (bld.bat and build.sh)
+  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vvv"
 
 requirements:
   build:
+    - pip
     - python
-    - setuptools
-    - larray
 
   run:
     - python
     - larray
 
 test:
+#  requires:
+#    - pytest
+
   imports:
     - larray_eurostat
 
-  # commands:
-    # You can put test commands to be run here.  Use this to test that the
-    # entry points work.
-
-  # You can also put a file called run_test.py in the recipe that will be run
-  # at test time.
-
-  # requires:
-    # Put any additional test requirements here.  For example
-    # - nose
+#  commands:
+#    # You can also put a file called run_test.py in the recipe that will be run at test time.
+#    - pytest --pyargs larray_eurostat
 
 about:
   home: https://github.com/larray-project/larray_eurostat
-  license: GPL
+  license: GPL-3.0
+  license_family: GPL
+  license_file: LICENSE
   summary: "Additional package to import Eurostat files using LArray"
 
+extra:
+  recipe-maintainers:
+    - alixdamman
+    - gdementen
+
 # See
-# http://docs.continuum.io/conda/build.html for
-# more information about meta.yaml
+# https://conda.io/docs/user-guide/tasks/build-packages/index.html
+# for more information about meta.yaml
