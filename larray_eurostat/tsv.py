@@ -31,7 +31,7 @@ else:
         return s.translate({ord(c): None for c in chars})
 
 
-EUROSTAT_BASEURL = "http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file="
+EUROSTAT_BASEURL = "https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file="
 
 
 def _get_one(indicator, drop_markers=True):
@@ -48,7 +48,7 @@ def _get_one(indicator, drop_markers=True):
                 return read_eurostat(StringIO(s))
             except Exception as e:
                 if sys.version_info[0] >= 3:
-                    e.args = (e.args[0] + " \nCan't open file {}".format(f.geturl()),)
+                    e.args = (e.args[0] + "\nCan't open file {}".format(f.geturl()),)
                 raise
 
 
