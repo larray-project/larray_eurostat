@@ -1,11 +1,8 @@
 #!/usr/bin/python
-# coding=utf-8
 # Release script for larray-eurostat
 # Licence: GPLv3
 # Requires:
 # * git
-from __future__ import print_function, unicode_literals
-
 import sys
 from os.path import abspath, dirname
 from releaser import make_release
@@ -28,7 +25,7 @@ ONLINE_DOC = None
 if __name__ == '__main__':
     argv = sys.argv
     if len(argv) < 2:
-        print("Usage: {} [-c|--conda] release_name|dev [step|startstep:stopstep] [branch]".format(argv[0]))
+        print(f"Usage: {argv[0]} [-c|--conda] release_name|dev [step|startstep:stopstep] [branch]")
         print("make release steps:", ', '.join(f.__name__ for f, _ in make_release_steps))
         print("update conda-forge feedstock steps:", ', '.join(f.__name__ for f, _ in update_feedstock_steps))
         sys.exit()
