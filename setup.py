@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import os
 from setuptools import setup, find_packages
 
@@ -29,8 +27,6 @@ CLASSIFIERS = [
     'Intended Audience :: Science/Research',
     'Intended Audience :: Developers',
     'Programming Language :: Python',
-    'Programming Language :: Python :: 2',
-    'Programming Language :: Python :: 2.7',
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: 3.6',

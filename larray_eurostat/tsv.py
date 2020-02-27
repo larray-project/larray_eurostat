@@ -1,34 +1,13 @@
-from __future__ import absolute_import, division, print_function
-
-import sys
 import gzip
 
 from larray import read_eurostat, Session
 
-if sys.version_info[0] < 3:
-    from StringIO import StringIO
-    from urllib2 import urlopen as _urlopen
-    from contextlib import closing
+from io import StringIO
+from urllib.request import urlopen
+gzip_open = gzip.open
 
-    # this version of urlopen can probably be used *only* as a context manager
-    def urlopen(*args, **kwargs):
-        with closing(_urlopen(*args, **kwargs)) as f:
-            # fetching the whole file instead of streaming it, because Python2's gzip does not support that
-            compressed_data = StringIO(f.read())
-        return closing(compressed_data)
-
-    def gzip_open(file_obj, mode):
-        return gzip.GzipFile(fileobj=file_obj, mode='rb')
-
-    def remove_chars(s, chars):
-        return s.translate(None, chars)
-else:
-    from io import StringIO
-    from urllib.request import urlopen
-    gzip_open = gzip.open
-
-    def remove_chars(s, chars):
-        return s.translate({ord(c): None for c in chars})
+def remove_chars(s, chars):
+    return s.translate({ord(c): None for c in chars})
 
 
 EUROSTAT_BASEURL = "https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file="
@@ -47,8 +26,7 @@ def _get_one(indicator, drop_markers=True):
                     s = s[:first_line_end] + remove_chars(s[first_line_end:], ' dbefcuipsrzn:')
                 return read_eurostat(StringIO(s))
             except Exception as e:
-                if sys.version_info[0] >= 3:
-                    e.args = (e.args[0] + "\nCan't open file {}".format(f.geturl()),)
+                e.args = (e.args[0] + "\nCan't open file {}".format(f.geturl()),)
                 raise
 
 
