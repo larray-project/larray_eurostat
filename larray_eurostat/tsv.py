@@ -1,10 +1,9 @@
 import gzip
+from io import StringIO
+from urllib.request import urlopen
 
 from larray import read_eurostat, Session
 
-from io import StringIO
-from urllib.request import urlopen
-gzip_open = gzip.open
 
 def remove_chars(s, chars):
     return s.translate({ord(c): None for c in chars})
@@ -17,7 +16,7 @@ def _get_one(indicator, drop_markers=True):
     """Get one Eurostat indicator and return it as an array"""
 
     with urlopen(EUROSTAT_BASEURL + 'data/' + indicator + ".tsv.gz") as f:
-        with gzip_open(f, mode='rt') as fgz:
+        with gzip.open(f, mode='rt') as fgz:
             try:
                 s = fgz.read()
                 if drop_markers:
@@ -36,14 +35,14 @@ def eurostat_get(indicators, drop_markers=True):
     Parameters
     ----------
     indicators : str or list/tuple of str
-        Name(s) of eurostat indicator(s). When requesting a single indicator, the result is an array, otherwise it is a
+        Name(s) of eurostat indicator(s). When requesting a single indicator, the result is an Array, otherwise it is a
         Session.
-    drop_markers : bool
-        drop markers.
+    drop_markers : bool, optional
+        Whether or not to drop special markers. Defaults to True.
 
     Returns
     -------
-    LArray or Session
+    Array or Session
 
     Examples
     --------
