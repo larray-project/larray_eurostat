@@ -25,7 +25,7 @@ def _get_one(indicator, drop_markers=True):
                     s = s[:first_line_end] + remove_chars(s[first_line_end:], ' dbefcuipsrzn:')
                 return read_eurostat(StringIO(s))
             except Exception as e:
-                e.args = (e.args[0] + "\nCan't open file {}".format(f.geturl()),)
+                e.args = (e.args[0] + f"\nCan't open file {f.geturl()}",)
                 raise
 
 
