@@ -3,6 +3,9 @@
 # Licence: GPLv3
 # Requires:
 # * git
+# * releaser
+# * conda-build
+# * anaconda-client
 import sys
 from os.path import abspath, dirname
 from releaser import make_release
