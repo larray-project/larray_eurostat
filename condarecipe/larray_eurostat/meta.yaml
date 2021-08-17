@@ -1,4 +1,4 @@
-{% set version = "0.33-dev" %}
+{% set version = "0.33" %}
 
 package:
   name: larray_eurostat
