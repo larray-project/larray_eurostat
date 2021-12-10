@@ -74,6 +74,6 @@ def eurostat_get(indicators, drop_markers=True):
     memory used: 24.94 Kb
     """
     if isinstance(indicators, (tuple, list)):
-        return Session([(i, _get_one(i, drop_markers=drop_markers)) for i in indicators])
+        return Session({i: _get_one(i, drop_markers=drop_markers) for i in indicators})
     else:
         return _get_one(indicators, drop_markers=drop_markers)
