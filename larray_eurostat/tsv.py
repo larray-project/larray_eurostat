@@ -15,7 +15,7 @@ EUROSTAT_BASEURL = "https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/Bul
 def _get_one(indicator, drop_markers=True):
     """Get one Eurostat indicator and return it as an array"""
 
-    with urlopen(EUROSTAT_BASEURL + 'data/' + indicator + ".tsv.gz") as f:
+    with urlopen(f"{EUROSTAT_BASEURL}data/{indicator}.tsv.gz") as f:
         with gzip.open(f, mode='rt') as fgz:
             try:
                 s = fgz.read()
