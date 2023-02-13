@@ -7,5 +7,5 @@ def test_eurostat_get():
     dataset = 'nama_aux_cra'
 
     msg = f"Not a gzipped file (b'<!')\nCan't open file {EUROSTAT_BASEURL}data/{dataset}.tsv.gz"
-    with pytest.raises(OSError, match=re.escape(msg)):
+    with pytest.raises(OSError, match=f'^{re.escape(msg)}$'):
         eurostat_get(dataset)
