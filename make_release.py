@@ -21,7 +21,8 @@ SRC_DOC = None
 CONDA_BUILD_ARGS = {'--user': 'larray-project'}
 
 GITHUB_REP = "https://github.com/larray-project/larray_eurostat"
-CONDA_FEEDSTOCK_REP = "https://github.com/larray-project/larray_eurostat-feedstock.git"
+UPSTREAM_CONDAFORGE_FEEDSTOCK_REP = "https://github.com/conda-forge/larray_eurostat-feedstock.git"
+ORIGIN_CONDAFORGE_FEEDSTOCK_REP = "https://github.com/larray-project/larray_eurostat-feedstock.git"
 
 
 if __name__ == '__main__':
@@ -33,7 +34,8 @@ if __name__ == '__main__':
         sys.exit()
 
     if argv[1] == '-c' or argv[1] == '--conda':
-        update_feedstock(GITHUB_REP, CONDA_FEEDSTOCK_REP, SRC_CODE, *argv[2:], tmp_dir=TMP_PATH_CONDA)
+        update_feedstock(GITHUB_REP, UPSTREAM_CONDAFORGE_FEEDSTOCK_REP, ORIGIN_CONDAFORGE_FEEDSTOCK_REP,
+                         SRC_CODE, *argv[2:], tmp_dir=TMP_PATH_CONDA)
     else:
         local_repository = abspath(dirname(__file__))
         make_release(local_repository, PACKAGE_NAME, SRC_CODE, *argv[1:], src_documentation=SRC_DOC, tmp_dir=TMP_PATH,
