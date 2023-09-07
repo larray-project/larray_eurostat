@@ -3,9 +3,5 @@ channels:
   - defaults
   - larray-project
 dependencies:
-  - pip
   - larray
-  - pytest>=3.5
-  - flake8
-  - pip:
-    - pytest-flake8
+  - pytest >=6
