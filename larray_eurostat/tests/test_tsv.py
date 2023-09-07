@@ -1,6 +1,8 @@
-import pytest
 import re
-from larray_eurostat.tsv import *
+
+import pytest
+
+from larray_eurostat.tsv import eurostat_get, EUROSTAT_BASEURL
 
 
 def test_eurostat_get_bad_dataset():
