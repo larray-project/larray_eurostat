@@ -12,6 +12,7 @@ AUTHOR = 'Alix Damman, Gaetan de Menten, Geert Bryon, Johan Duyck'
 AUTHOR_EMAIL = 'ald@plan.be'
 DESCRIPTION = "Additional package to import Eurostat files using LArray"
 LONG_DESCRIPTION = readlocal("README.rst")
+LONG_DESCRIPTION_CONTENT_TYPE = "text/x-rst"
 SETUP_REQUIRES = []
 INSTALL_REQUIRES = ['larray']
 TESTS_REQUIRE = ['pytest']
@@ -45,6 +46,7 @@ setup(
     classifiers=CLASSIFIERS,
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
+    long_description_content_type=LONG_DESCRIPTION_CONTENT_TYPE,
     setup_requires=SETUP_REQUIRES,
     install_requires=INSTALL_REQUIRES,
     tests_require=TESTS_REQUIRE,
