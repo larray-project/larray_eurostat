@@ -1,3 +1,19 @@
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = [
+    "larray_eurostat"
+]
+addopts = [
+    "-v",
+    "--doctest-modules",
+#    "--cov",
+]
+
+filterwarnings = [
+    # turn warnings into errors (unless they are explicitly handled in tests or ignored here)
+    "error",
+]
+
 [tool.ruff]
 # Enable Pyflakes `E` and `F` codes by default.
 select = ["E", "F"]
