@@ -2,35 +2,34 @@ import gzip
 from io import StringIO
 from urllib.request import urlopen
 
-from larray import read_eurostat, Session
+from larray import Session, read_eurostat
 
 
-def remove_chars(s, chars):
+def _remove_chars(s, chars):
     return s.translate({ord(c): None for c in chars})
 
 
 EUROSTAT_BASEURL = "https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file="
 
 
-def _get_one(indicator, drop_markers=True):
-    """Get one Eurostat indicator and return it as an array"""
+def _get_one(indicator, *, drop_markers=True):
+    """Get one Eurostat indicator and return it as an array."""
+    url = f"{EUROSTAT_BASEURL}data/{indicator}.tsv.gz"
+    with urlopen(url) as f, gzip.open(f, mode='rt') as fgz:    # noqa: S310
+        try:
+            s = fgz.read()
+            if drop_markers:
+                first_line_end = s.index('\n')
+                # strip markers except on first line
+                s = s[:first_line_end] + _remove_chars(s[first_line_end:], ' dbefcuipsrzn:')
+            return read_eurostat(StringIO(s))
+        except Exception as e:
+            e.args = (e.args[0] + f"\nCan't open file {f.geturl()}",)
+            raise
 
-    with urlopen(f"{EUROSTAT_BASEURL}data/{indicator}.tsv.gz") as f:
-        with gzip.open(f, mode='rt') as fgz:
-            try:
-                s = fgz.read()
-                if drop_markers:
-                    first_line_end = s.index('\n')
-                    # strip markers except on first line
-                    s = s[:first_line_end] + remove_chars(s[first_line_end:], ' dbefcuipsrzn:')
-                return read_eurostat(StringIO(s))
-            except Exception as e:
-                e.args = (e.args[0] + f"\nCan't open file {f.geturl()}",)
-                raise
 
-
-def eurostat_get(indicators, drop_markers=True):
-    """Gets one or several Eurostat indicators and return them as an array or a session.
+def eurostat_get(indicators, *, drop_markers=True):
+    """Get one or several Eurostat indicators and return them as an array or a session.
 
     Parameters
     ----------
@@ -75,5 +74,4 @@ def eurostat_get(indicators, drop_markers=True):
     """
     if isinstance(indicators, (tuple, list)):
         return Session({i: _get_one(i, drop_markers=drop_markers) for i in indicators})
-    else:
-        return _get_one(indicators, drop_markers=drop_markers)
+    return _get_one(indicators, drop_markers=drop_markers)
