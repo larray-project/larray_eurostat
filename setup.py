@@ -19,7 +19,6 @@ TESTS_REQUIRE = ['pytest']
 
 LICENSE = 'GPLv3'
 URL = 'https://github.com/larray-project/larray_eurostat'
-PACKAGE_DATA = {'larray_eurostat': ['tests/data/*']}
 
 CLASSIFIERS = [
     'Development Status :: 4 - Beta',
@@ -52,5 +51,4 @@ setup(
     tests_require=TESTS_REQUIRE,
     url=URL,
     packages=find_packages(),
-    package_data=PACKAGE_DATA,
 )
