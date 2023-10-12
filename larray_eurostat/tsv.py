@@ -12,8 +12,8 @@ def remove_chars(s, chars):
     return s.translate({ord(c): None for c in chars})
 
 
-EUROSTAT_BASEURL = "https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file="
-
+# OLD API: EUROSTAT_BASEURL = "https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file="
+EUROSTAT_BASEURL = "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/"
 
 def _get_one(indicator, drop_markers=True, cache_dir=None, maxage=86400):
     """Get one Eurostat indicator and return it as an array"""
@@ -34,7 +34,7 @@ def _get_one(indicator, drop_markers=True, cache_dir=None, maxage=86400):
             if oldest_acceptable is None or cached_date >= oldest_acceptable:
                 return read_hdf(cached_path, indicator)
 
-    with urlopen(f"{EUROSTAT_BASEURL}data/{indicator}.tsv.gz") as f:
+    with urlopen(f"{EUROSTAT_BASEURL}{indicator}?format=TSV&compressed=true") as f:
         with gzip.open(f, mode='rt') as fgz:
             try:
                 s = fgz.read()
@@ -125,8 +125,7 @@ def get_index(cache_dir=None, maxage='last_index_update'):
             df.to_pickle(cached_path)
         return df
 
-
-def eurostat_get(indicators, drop_markers=True, cache_dir=None, maxage=86400):
+def eurostat_get(indicators, drop_markers=True, cache_dir=None, maxage=86400, freq='A'):
     """Gets one or several Eurostat indicators and return them as an array or a session.
 
     Parameters
