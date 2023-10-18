@@ -8,13 +8,27 @@ from larray import Session, read_eurostat
 def _remove_chars(s, chars):
     return s.translate({ord(c): None for c in chars})
 
+def transform_time_labels(label):
+    # Account for ambiguous label type (in multifreq larrays, year is str; in only-year larrays, year is given as int)
+    # Need string format to search for patterns (e.g. Q1,M12), but return int format when only years are given.
+    str_label = str(label)
 
-EUROSTAT_BASEURL = "https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file="
+    if '-Q' in str_label:
+        year, quarter = str_label.split('-')
+        return f"{year}Q{quarter[1:]}"
+    elif '-' in str_label:
+        year, month = str_label.split('-')
+        return f"{year}M{month.zfill(2)}"
+    elif isinstance(label, int):
+        return label
+    else:
+        return str_label
 
+EUROSTAT_BASEURL = "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/"
 
 def _get_one(indicator, *, drop_markers=True):
     """Get one Eurostat indicator and return it as an array."""
-    url = f"{EUROSTAT_BASEURL}data/{indicator}.tsv.gz"
+    url = f"{EUROSTAT_BASEURL}{indicator}?format=TSV&compressed=true"
     with urlopen(url) as f, gzip.open(f, mode='rt') as fgz:    # noqa: S310
         try:
             s = fgz.read()
@@ -22,7 +36,20 @@ def _get_one(indicator, *, drop_markers=True):
                 first_line_end = s.index('\n')
                 # strip markers except on first line
                 s = s[:first_line_end] + _remove_chars(s[first_line_end:], ' dbefcuipsrzn:')
-            return read_eurostat(StringIO(s))
+
+            la_data = read_eurostat(StringIO(s))
+            
+            # Rename time axis. Rename time labels and reverse them (compatibility old API)
+            la_data = la_data.rename(TIME_PERIOD='time')
+            la_data = la_data.set_labels('time', transform_time_labels)
+            la_data = la_data.reverse('time')
+            
+            # If only one frequency: subset and return without redundant freq Axis (compatibility old API)
+            if len(la_data.freq) == 1:
+                return la_data[la_data.freq.labels[0]]
+            else:
+                return la_data
+
         except Exception as e:
             e.args = (e.args[0] + f"\nCan't open file {f.geturl()}",)
             raise
