@@ -1,3 +1,15 @@
+###############################################################################################
+## OLD EUROSTAT API was deprecated anno 23 october 2023. 
+## Minor modification were made in below functionality (which supports caching).
+##
+## CHANGES: - change of base url for compatibility with new API
+##          - new time fequency extraction method compatible with new API 
+## 
+## These changes allow for a continued support in the Larray Editor (with caching).
+## For a different and independent CLI implementation for the new API, see eurostat_get_new.py
+###############################################################################################
+
+
 import os
 import gzip
 from io import StringIO
@@ -183,3 +195,31 @@ def eurostat_get(indicators, drop_markers=True, cache_dir=None, maxage=86400, fr
                         for i in indicators})
     else:
         return _get_one(indicators, drop_markers=drop_markers, cache_dir=cache_dir, maxage=maxage)
+
+
+def freq_eurostat_editor(freqs, la_data):
+    # If "TIME_PERIOD" (= NEW API) exists in la_data's axes names, rename it to "time"
+    if "TIME_PERIOD" in la_data.axes.names:
+        freq_data = la_data.rename(TIME_PERIOD='time')
+
+    a_time = []
+
+    for freq in freqs:
+        # str() because larray labels are not always strings, might also return ints
+        if freq == 'A':
+            a_time += [t for t in freq_data.time.labels if '-' not in str(t)]
+        elif freq == 'Q':
+            a_time += [t for t in freq_data.time.labels if 'Q' in str(t)]
+        elif freq == 'M':
+            a_time += [t for t in freq_data.time.labels if '-' in t and 'Q' not in str(t)]
+
+    # Maintain order and use set for non-duplicates
+    a_time = sorted(set(a_time))
+
+    if len(freqs) == 1 and freq[0] in ['A', 'Q', 'M']:
+        freq_value = str(freqs[0])
+    else:
+        freq_value = freqs
+
+    # Return with row and colum-wise subsetting
+    return freq_data[freq_value, a_time]
