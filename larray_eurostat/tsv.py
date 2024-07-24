@@ -1,12 +1,14 @@
 import gzip
 from io import StringIO
 from urllib.request import urlopen
+import numpy as np
 
 from larray import Session, read_eurostat
 
 
 def _remove_chars(s, chars):
     return s.translate({ord(c): None for c in chars})
+
 
 def transform_time_labels(label):
     # Account for ambiguous label type (in multifreq larrays, year is str; in only-year larrays, year is given as int)
@@ -24,7 +26,9 @@ def transform_time_labels(label):
     else:
         return str_label
 
+
 EUROSTAT_BASEURL = "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/"
+
 
 def _get_one(indicator, *, drop_markers=True):
     """Get one Eurostat indicator and return it as an array."""
@@ -41,7 +45,8 @@ def _get_one(indicator, *, drop_markers=True):
             
             # Rename time axis. Rename time labels and reverse them (compatibility old API)
             la_data = la_data.rename(TIME_PERIOD='time')
-            la_data = la_data.set_labels('time', transform_time_labels)
+            if np.issubdtype(la_data.time.dtype, np.character):
+                la_data = la_data.set_labels('time', transform_time_labels)
             la_data = la_data.reverse('time')
             
             # If only one frequency: subset and return without redundant freq Axis (compatibility old API)
