@@ -51,7 +51,7 @@ def _get_one(indicator, *, drop_markers=True):
             
             # If only one frequency: subset and return without redundant freq Axis (compatibility old API)
             if len(la_data.freq) == 1:
-                return la_data[la_data.freq.labels[0]]
+                return la_data[la_data.freq.i[0]]
             else:
                 return la_data
 
