@@ -56,7 +56,7 @@ def _get_one(indicator, *, drop_markers=True):
                 return la_data
 
         except Exception as e:
-            e.args = (e.args[0] + f"\nCan't open file {f.geturl()}",)
+            e.args = (f"{e.args[0]}\nCan't open file {f.geturl()}",)
             raise
 
 
