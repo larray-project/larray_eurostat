@@ -10,8 +10,12 @@ def test_eurostat_get_bad_dataset():
     dataset = 'does-not-exist'
 
     msg = "HTTP Error 404: Not Found"
-    with pytest.raises(HTTPError, match=f'^{re.escape(msg)}$'):
+    with pytest.raises(HTTPError, match=f'^{re.escape(msg)}$') as ex_info:
         eurostat_get(dataset)
+    # HTTPError Exceptions hold a reference to some resources which must
+    # be explicitly closed, otherwise pytest complains on Python 3.14
+    exception = ex_info.value
+    exception.close()
 
 
 # https://github.com/larray-project/larray_eurostat/issues/33
