@@ -38,7 +38,7 @@ about:
   license_family: GPL
   license_file: LICENSE
   summary: "Additional package to import Eurostat files using LArray"
-  dev_url: http://github.com/larray-project/larray_eurostat
+  dev_url: https://github.com/larray-project/larray_eurostat
 
 extra:
   recipe-maintainers:
