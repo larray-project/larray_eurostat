@@ -18,7 +18,7 @@ TMP_PATH_CONDA = r"c:\tmp\larray_eurostat_conda_new_release"
 PACKAGE_NAME = "larray_eurostat"
 SRC_CODE = "larray_eurostat"
 SRC_DOC = None
-CONDA_BUILD_ARGS = {'--user': 'larray-project'}
+ANACONDA_UPLOAD_ARGS = {'--user': 'larray-project'}
 
 GITHUB_REP = "https://github.com/larray-project/larray_eurostat"
 UPSTREAM_CONDAFORGE_FEEDSTOCK_REP = "https://github.com/conda-forge/larray_eurostat-feedstock.git"
@@ -38,5 +38,6 @@ if __name__ == '__main__':
                          SRC_CODE, *argv[2:], tmp_dir=TMP_PATH_CONDA)
     else:
         local_repository = abspath(dirname(__file__))
-        make_release(local_repository, PACKAGE_NAME, SRC_CODE, *argv[1:], src_documentation=SRC_DOC, tmp_dir=TMP_PATH,
-                     conda_build_args=CONDA_BUILD_ARGS)
+        make_release(local_repository, PACKAGE_NAME, SRC_CODE, *argv[1:],
+                     src_documentation=SRC_DOC, tmp_dir=TMP_PATH,
+                     anaconda_upload_args=ANACONDA_UPLOAD_ARGS)
