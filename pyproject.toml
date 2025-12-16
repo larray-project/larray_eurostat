@@ -48,6 +48,10 @@ Homepage = "https://github.com/larray-project/larray_eurostat"
 Repository = "https://github.com/larray-project/larray_eurostat"
 Issues = "https://github.com/larray-project/larray_eurostat/issues"
 
+[tool.setuptools.packages.find]
+where = ["."]
+namespaces = false
+
 [tool.pytest.ini_options]
 minversion = "6.0"
 testpaths = [
