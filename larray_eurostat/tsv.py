@@ -27,28 +27,30 @@ def transform_time_labels(label):
         return str_label
 
 
-EUROSTAT_BASEURL = "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/"
+EUROSTAT_BASEURL = "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data"
 
+FLAGS = ': bcdefinprsuz'
 
 def _get_one(indicator, *, drop_markers=True):
     """Get one Eurostat indicator and return it as an array."""
-    url = f"{EUROSTAT_BASEURL}{indicator}?format=TSV&compressed=true"
+    url = f"{EUROSTAT_BASEURL}/{indicator}?format=TSV&compressed=true"
     with urlopen(url) as f, gzip.open(f, mode='rt') as fgz:    # noqa: S310
         try:
             s = fgz.read()
             if drop_markers:
                 first_line_end = s.index('\n')
                 # strip markers except on first line
-                s = s[:first_line_end] + _remove_chars(s[first_line_end:], ' dbefcuipsrzn:')
+                s = s[:first_line_end] + _remove_chars(s[first_line_end:],
+                                                       FLAGS)
 
             la_data = read_eurostat(StringIO(s))
-            
+
             # Rename time axis. Rename time labels and reverse them (compatibility old API)
             la_data = la_data.rename(TIME_PERIOD='time')
             if np.issubdtype(la_data.time.dtype, np.character):
                 la_data = la_data.set_labels('time', transform_time_labels)
             la_data = la_data.reverse('time')
-            
+
             # If only one frequency: subset and return without redundant freq Axis (compatibility old API)
             if len(la_data.freq) == 1:
                 return la_data[la_data.freq.i[0]]
