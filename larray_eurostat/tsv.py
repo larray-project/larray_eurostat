@@ -29,7 +29,33 @@ def transform_time_labels(label):
 
 EUROSTAT_BASEURL = "https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data"
 
-FLAGS = ': bcdefinprsuz'
+# References
+# ==========
+# https://sdmx.org/sdmx_cdcl/
+# https://sdmx.org/wp-content/uploads/CL_OBS_STATUS_v2_1.docx
+# https://sdmx.org/wp-content/uploads/CL_OBS_STATUS_implementation_20-10-2014.pdf
+# A / normal value
+# B / time series break (highest importance)
+# D / definition differs
+# E / estimated value
+# F / forecast value
+# G / experimental value
+# H / missing value; holiday or weekend
+# I / imputed value
+# J / derogation
+# K / Data included in another category
+# L / missing value; data exist but were not collected
+# M / missing value; data cannot exist
+# N / not significant
+# O / missing value
+# P / provisional value
+# Q / missing value; suppressed
+# S / strike and other special events
+# U / low reliability
+# V / unvalidated value
+# W / Includes data from another category
+SDMX_2_1_FLAGS = ': abdefghijklmnopqsuvw'
+
 
 def _get_one(indicator, *, drop_markers=True):
     """Get one Eurostat indicator and return it as an array."""
@@ -41,7 +67,7 @@ def _get_one(indicator, *, drop_markers=True):
                 first_line_end = s.index('\n')
                 # strip markers except on first line
                 s = s[:first_line_end] + _remove_chars(s[first_line_end:],
-                                                       FLAGS)
+                                                       SDMX_2_1_FLAGS)
 
             la_data = read_eurostat(StringIO(s))
 
