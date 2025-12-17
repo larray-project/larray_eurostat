@@ -11,10 +11,10 @@ description = "Additional package to import Eurostat files using LArray"
 readme = "README.rst"
 
 authors = [
-  {name = "Gaetan de Menten", email = "gdementen@gmail.com"},
   {name = "Geert Bryon"},
-  {name = "Alix Damman"},
-  {name = "Johan Duyck"},
+  {name = "Gaetan de Menten", email = "gdementen@gmail.com"},
+  {name = "Alix Damman", email = "ald@plan.be"},
+  {name = "Yannick Van den Abbeel"},
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
