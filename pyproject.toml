@@ -8,7 +8,7 @@ requires = [
 name = "larray_eurostat"
 version = "0.35-dev"
 description = "Additional package to import Eurostat files using LArray"
-readme = "README.rst"
+readme = { file = "README.rst", content-type = "text/x-rst" }
 
 authors = [
   {name = "Geert Bryon"},
