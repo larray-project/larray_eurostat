@@ -64,10 +64,12 @@ def _get_one(indicator, *, drop_markers=True):
         try:
             s = fgz.read()
             if drop_markers:
-                first_line_end = s.index('\n')
+                first_line_end = s.index('\n') + 1
                 # strip markers except on first line
-                s = s[:first_line_end] + _remove_chars(s[first_line_end:],
-                                                       SDMX_2_1_FLAGS)
+                header_line = s[:first_line_end]
+                data_lines = s[first_line_end:].replace('@C', '')
+                s = header_line + _remove_chars(data_lines,
+                                                SDMX_2_1_FLAGS)
 
             la_data = read_eurostat(StringIO(s))
 
