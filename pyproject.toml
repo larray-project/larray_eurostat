@@ -6,7 +6,7 @@ requires = [
 
 [project]
 name = "larray_eurostat"
-version = "0.35-dev"
+version = "0.35"
 description = "Additional package to import Eurostat files using LArray"
 readme = { file = "README.rst", content-type = "text/x-rst" }
 
